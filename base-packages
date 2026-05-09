@@ -2,7 +2,6 @@ clamav
 chrony
 curl
 fail2ban
-awk
 gawk
 git
 htop
@@ -30,3 +29,4 @@ nmap
 iftop 
 iperf3 
 ethtool
+facter
