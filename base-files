@@ -1,0 +1,10 @@
+.aliases
+.bash_aliases
+.bash_logout
+.bashrc
+.gitconfig
+.profile
+.zshenv
+.zshrc
+.ssh/config
+.ssh/authorized_keys
