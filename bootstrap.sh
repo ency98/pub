@@ -8,10 +8,10 @@
 #&  Script variables and functions
 
 #? info|success|warn|error "Message to print."
-info()    { echo -e "\n${BLUE}[INFO]${NC}  $*\n"; }
-success() { echo -e "\n${GREEN}[OK]${NC}    $*\n"; }
-warn()    { echo -e "\n${YELLOW}[WARN]${NC}  $*\n"; }
-error()   { echo -e "\n${RED}[ERROR]${NC} $*\n" >&2; }
+info()    { echo -e "${BLUE}[INFO]${NC}  $*\n"; }
+success() { echo -e "${GREEN}[OK]${NC}    $*\n"; }
+warn()    { echo -e "${YELLOW}[WARN]${NC}  $*\n"; }
+error()   { echo -e "${RED}[ERROR]${NC} $*\n" >&2; }
 
 #? Prints a banner message.
 banner ()
