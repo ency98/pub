@@ -161,9 +161,7 @@ install_base_apps_apt() #* Install base applications from a list of packages sto
 
 	info "Install base applications from a list of packages stored in a remote file"
 
-	print_line && echo ""
-    confirm "Do you want to install base packages?" || return 0
-	print_line && echo ""
+	print_line
 
     info "Downloading updated base packages list..."
     wget -O "$PACKAGE_LIST" "$PACKAGE_LIST_URL"

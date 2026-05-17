@@ -29,11 +29,13 @@ or
 wget -O "$BOOTSTRAP_DEST" "$BOOTSTRAP_SRC"
 BOOTSTRAP_SRC="https://raw.githubusercontent.com/ency98/pub/refs/heads/main/bootstrap.sh"
 BOOTSTRAP_DEST="/tmp/bootstrap.sh"
-cd ~ && mkdir-p ~/.scripts
+cd "$HOME" && mkdir -p "$HOME/.scripts" && \
+rm -f "$HOME/.scripts/bootstrap.sh" "$BOOTSTRAP_DEST" && \
 wget -O "$BOOTSTRAP_DEST" "$BOOTSTRAP_SRC" && \
 chmod +x "$BOOTSTRAP_DEST" && \
-mv "$BOOTSTRAP_DEST" ~/.scripts/bootstrap.sh
-./.scripts/bootstrap.sh
+mv -v "$BOOTSTRAP_DEST" "$HOME/.scripts/bootstrap.sh" && \
+unset BOOTSTRAP_SRC && \
+unset BOOTSTRAP_DEST
 
 If you need to run the script again you can run:
 
