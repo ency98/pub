@@ -8,10 +8,10 @@
 #&  Script variables and functions
 
 #? info|success|warn|error "Message to print."
-info()    { echo -e "${BLUE}[INFO]${NC}  $*"; }
-success() { echo -e "${GREEN}[OK]${NC}    $*"; }
-warn()    { echo -e "${YELLOW}[WARN]${NC}  $*"; }
-error()   { echo -e "${RED}[ERROR]${NC} $*" >&2; }
+info()    { echo -e "\n${BLUE}[INFO]${NC}\n  $*"; }
+success() { echo -e "\n${GREEN}[OK]${NC}\n    $*"; }
+warn()    { echo -e "\n${YELLOW}[WARN]${NC}\n  $*"; }
+error()   { echo -e "\n${RED}[ERROR]${NC}\n $*" >&2; }
 
 #? Prints a banner message.
 banner ()
@@ -39,10 +39,13 @@ CHECK_ON="${GREEN}[✓]${RESET}"; CHECK_OFF="${DIM}[ ]${RESET}"
 
 # ── Menu items: "Label|function_name" ─────────────────────────────────────────
 declare -a ITEMS=(
+	"Update this script|update_bootstrap_script"
 	"Update all|update_all"
+	"Install base apps from apt|install_base_apps_apt"
 	"Install zsh|install_zsh"
 	"Install brew|install_brew"
 	"Install cargo|install_cargo"
+	"Install docker|install_docker"
 	"Install nerd fonts|install_nerdfonts"
 	"Install atuin|install_atuin"
 	"Install starship|install_starship"
@@ -59,7 +62,96 @@ CURSOR=0
 COUNT=${#ITEMS[@]}
 
 # ── Stub functions (replace with your real implementations) ──────────────────
+#? ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !#
+#?	updates
+update_all ()
+{
+	local BANNER_TITLE="Updating the system"
+	local BANNER_EXIT="System update script finished at: ${YELLOW}$(date "+%Y-%m-%d_%H:%M:%S")\n${RED}Please reboot your system as soon as possible to ensure all changes have been applied.${NC}"
 
+	banner "$BANNER_TITLE"
+
+	info "Updating the system."
+
+	print_line
+	if [[ "$(uname -s)" == "Darwin" ]]; then
+		info "\nDetected macOS."
+		if -f /home/linuxbrew/.linuxbrew/bin/brew &>/dev/null; then
+			print_line
+			info "brew package manager detected. Running brew update and upgrade."
+			info "Running brew update...\n"
+			brew update -q  && \
+			success "\nSuccessfully updated brew" || error "\nFailed to update brew"
+			info "Running brew upgrade...\n"
+			brew upgrade -q  && \
+			success "\nSuccessfully upgraded brew" || error "\nFailed to upgrade brew"
+		fi
+	elif [[ "$(uname -s)" == "Linux" ]]; then
+		info "\nDetected Linux."
+		print_line
+		info "Running apt update and upgrade."
+		info "Running apt update...\n"
+		sudo apt-get update -y -q --fix-missing && \
+		success "\nSuccessfully updated system" || error "\nFailed to update system"
+		print_line
+		info "Running apt upgrade...\n"
+		sudo apt-get upgrade -y -q --fix-missing --auto-remove --purge && \
+		success "\nSuccessfully upgraded system" || error "\nFailed to upgrade system"
+		print_line
+		info "Since we are here making sure curl and wget are installed."
+		sudo apt install curl wget -qq -y  && \
+		success "curl and wget installed successfully" || error "Failed to install curl and wget"
+		if -f /home/linuxbrew/.linuxbrew/bin/brew &>/dev/null; then
+			print_line
+			info "brew package manager detected. Running brew update and upgrade as well."
+			info "Running brew update and upgrade."
+			brew update -q  && \
+			success "\nSuccessfully updated brew" || error "\nFailed to update brew"
+			brew upgrade -q  && \
+			success "\nSuccessfully upgraded brew" || error "\nFailed to upgrade brew"
+		fi
+	fi
+
+	banner "$BANNER_EXIT"
+	unset BANNER_TITLE
+	unset BANNER_EXIT
+	return 0
+}
+#? ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !#
+#?	update bootstrap script
+update_bootstrap_script ()
+{
+	local BANNER_TITLE="Updating the bootstrap script"
+	local BANNER_EXIT="Bootstrap script update finished at: ${YELLOW}$(date "+%Y-%m-%d_%H:%M:%S")${NC}"
+	local BOOTSTRAP_SRC="https://raw.githubusercontent.com/ency98/pub/refs/heads/main/bootstrap.sh"
+	local BOOTSTRAP_DEST="/tmp/bootstrap.sh"
+
+	banner "$BANNER_TITLE"
+
+	info "Updating this script."
+
+	print_line
+	info "Downloading updated bootstrap script from:\n${YELLOW}$BOOTSTRAP_SRC${NC}"
+	wget -O "$BOOTSTRAP_DEST" "$BOOTSTRAP_SRC"  && \
+	success "\nSuccessfully downloaded bootstrap script" || error "\nFailed to download bootstrap script"
+
+	print_line
+	info "Updating bootstrap script..."
+	mkdir -p ~/.scripts
+	chmod +x "$BOOTSTRAP_DEST"  && \
+	success "\nSuccessfully updated bootstrap script permissions" || error "\nFailed to update bootstrap script permissions"
+
+	mv -v "$BOOTSTRAP_DEST" ~/.scripts/bootstrap.sh  && \
+	success "\nSuccessfully updated bootstrap script file."  || error "\nFailed to update bootstrap script file."
+
+	banner "$BANNER_EXIT"
+	unset BANNER_TITLE
+	unset BANNER_EXIT
+	unset BOOTSTRAP_SRC
+	unset BOOTSTRAP_DEST
+	exit 0
+
+}
 #? ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !#
 #?	apt install: base applications
 install_base_apps_apt() #* Install base applications from a list of packages stored in a remote file
@@ -120,10 +212,8 @@ install_base_apps_apt() #* Install base applications from a list of packages sto
 	unset PACKAGE_LIST_URL
 	unset PACKAGE_LIST
 }
-
 #? ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !#
 #?	brew
-
 install_brew ()
 {
 	local BANNER_TITLE="Installing Homebrew/Linuxbrew Package Manager"
@@ -198,10 +288,8 @@ install_brew ()
 	unset BANNER_EXIT
 	return 0
 }
-
 #? ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !#
 #?	cargo
-
 install_cargo ()
 {
 	local BANNER_TITLE="Installing Cargo Package Manager"
@@ -247,16 +335,17 @@ install_cargo ()
 		info "Running install script for: Cargo B(inary)Install..."
 		curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 	fi
+	if [ -f "$HOME/.cargo/env" ]; then
+		. "$HOME/.cargo/env";
+	fi
 
 	banner "$BANNER_EXIT"
 	unset BANNER_TITLE
 	unset BANNER_EXIT
 	return 0
 }
-
 #? ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !#
 #?	zsh
-
 install_zsh ()
 {
 	local BANNER_TITLE="Installing zsh shell"
@@ -275,7 +364,7 @@ install_zsh ()
 		unset BANNER_EXIT
 		return 0
 	else
-		info "zsh is not installed."
+		warn "zsh is not installed."
 		info "Continuing with installation..."
 	fi
 
@@ -307,7 +396,6 @@ install_zsh ()
 }
 #? ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !#
 #?	docker
-
 install_docker ()
 {
 	local BANNER_TITLE="Installing Docker"
@@ -331,7 +419,7 @@ install_docker ()
 		unset BANNER_EXIT
 		return 0
 	else
-		info "Docker is not installed."
+		warn "Docker is not installed."
 		info "Continuing with installation..."
 	fi
 
@@ -396,10 +484,8 @@ install_docker ()
 	unset DKR_GRP
 	return 0
 }
-
 #? ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !#
 #?	nerdfonts
-
 install_nerdfonts()
 {
 	local BANNER_TITLE="Installing nerd fonts from brew"
@@ -451,7 +537,7 @@ install_nerdfonts()
 		print_line
 		info "Downloading $download_url"
 		zip_file="${font}.zip"
-		download_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/${zip_file}"
+		download_url="https://github.com/ryanoasis/nerd-fonts/releases/download/${version}/${zip_file}"
 		wget "$download_url"
 
 		info "Installing $font..."
@@ -478,10 +564,8 @@ install_nerdfonts()
 	unset download_url
 	return 0
 }
-
 #? ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !#
 #?	atuin
-
 install_atuin ()
 {
 	local BANNER_TITLE="Installing atuin a shell history manager"
@@ -521,10 +605,63 @@ install_atuin ()
 	unset BANNER_TITLE
 	unset BANNER_EXIT
 }
+#? ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !#
+#?	starship
+install_starship ()
+{
+	local BANNER_TITLE="Installing Starship Prompt"
+	local BANNER_EXIT="Starship install script finished at: ${YELLOW}$(date "+%Y-%m-%d_%H:%M:%S")${NC}"
 
+	banner "$BANNER_TITLE"
+
+	info "Installing the starship prompt"
+
+	print_line
+	info "Checking if starship is already installed."
+	if command -v "starship" &>/dev/null; then
+		success "starship is already installed."
+		banner "$BANNER_EXIT"
+		unset BANNER_TITLE
+		unset BANNER_EXIT
+		return 0
+	else
+		info "starship is not installed."
+		info "Continuing with installation..."
+	fi
+
+	print_line
+	info "Downloading install script..."
+	if ! command -v "curl" &>/dev/null; then
+		warn "curl not found. Downloading starship install script with wget instead of curl."
+		print_line
+		info "Running install script for: starship..."
+		wget https://starship.rs/install.sh -qO- | sh
+	else
+		print_line
+		info "Running install script."
+		warn "Downloading script from:\n${YELLOW}https://starship.rs/install.sh${NC}"
+		curl -sS https://starship.rs/install.sh | sh
+	fi
+
+
+	if command -v "starship" &>/dev/null; then
+		print_line
+		success "starship prompt installed successfully."
+		print_lie
+		info "Configuring starship promt withthe preset $PRESET"
+		starship preset gruvbox-rainbow -o ~/.config/starship.toml
+	else
+		print_line
+		error "starship prompt installation failed."
+	fi
+
+
+	banner "$BANNER_EXIT"
+	unset BANNER_TITLE
+	unset BANNER_EXIT
+}
 #? ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !#
 #?	chezmoi
-
 install_chezmoi ()
 {
 	local BANNER_TITLE="Installing chezmoi dotfile manager"
@@ -567,10 +704,8 @@ install_chezmoi ()
 	unset BANNER_TITLE
 	unset BANNER_EXIT
 }
-
 #? ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !#
 #?	init chezmoi
-
 init_chezmoi_token ()
 {
 	local BANNER_TITLE="Initializing chezmoi to update and manage local dot files"
@@ -685,7 +820,6 @@ init_chezmoi_token ()
 	unset DOTFILES_REPO
 	return $ERROR
 }
-
 init_chezmoi_ssh ()
 {
 	local BANNER_TITLE="Initializing chezmoi to update and manage local dot files"
@@ -782,104 +916,7 @@ init_chezmoi_ssh ()
 	unset DOTFILES_REPO
 	return $ERROR
 }
-#? ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !#
-#?	starship
 
-install_starship ()
-{
-	local BANNER_TITLE="Installing Starship Prompt"
-	local BANNER_EXIT="Starship install script finished at: ${YELLOW}$(date "+%Y-%m-%d_%H:%M:%S")${NC}"
-
-	banner "$BANNER_TITLE"
-
-	info "Installing the starship prompt"
-
-	print_line
-	info "Checking if starship is already installed."
-	if command -v "starship" &>/dev/null; then
-		success "starship is already installed."
-		banner "$BANNER_EXIT"
-		unset BANNER_TITLE
-		unset BANNER_EXIT
-		return 0
-	else
-		info "starship is not installed."
-		info "Continuing with installation..."
-	fi
-
-	print_line
-	info "Downloading install script..."
-	if ! command -v "curl" &>/dev/null; then
-		warn "curl not found. Downloading starship install script with wget instead of curl."
-		print_line
-		info "Running install script for: starship..."
-		wget https://starship.rs/install.sh -qO- | sh
-	else
-		print_line
-		info "Running install script."
-		warn "Downloading script from:\n${YELLOW}https://starship.rs/install.sh${NC}"
-		curl -sS https://starship.rs/install.sh | sh
-	fi
-
-
-	if command -v "starship" &>/dev/null; then
-		print_line
-		success "starship prompt installed successfully."
-	else
-		print_line
-		error "starship prompt installation failed."
-	fi
-
-	banner "$BANNER_EXIT"
-	unset BANNER_TITLE
-	unset BANNER_EXIT
-}
-
-update_all ()
-{
-	local BANNER_TITLE="Updating the system"
-	local BANNER_EXIT="System update script finished at: ${YELLOW}$(date "+%Y-%m-%d_%H:%M:%S")\n${RED}Please reboot your system as soon as possible to ensure all changes have been applied.${NC}"
-
-	banner "$BANNER_TITLE"
-
-	info "Updating the system."
-
-	print_line
-	if [[ "$(uname -s)" == "Darwin" ]]; then
-		info "Detected macOS. Running brew update and upgrade."
-		brew update -q  && \
-		success "Successfully updated brew" || error "Failed to update brew"
-		print_line
-		info "Since we are here making sure curl and wget are installed."
-		brew install -q curl wget   && \
-		success "curl and wget installed successfully" || error "Failed to install curl and wget"
-	elif [[ "$(uname -s)" == "Linux" ]]; then
-		info "Detected Linux."
-		print_line
-		info "Running apt update and upgrade."
-		info "Running apt update..."
-		sudo apt-get update -y -q --fix-missing && \
-		success "Successfully updated system" || error "Failed to update system"
-		print_line
-		info "Running apt upgrade..."
-		sudo apt-get upgrade -y -q --fix-missing --auto-remove --purge && \
-		success "Successfully upgraded system" || error "Failed to upgrade system"
-		print_line
-		info "Since we are here making sure curl and wget are installed."
-		sudo apt install curl wget -qq -y  && \
-		success "curl and wget installed successfully" || error "Failed to install curl and wget"
-		info "Running brew update and upgrade."
-		brew update -q  && \
-		success "Successfully updated brew" || error "Failed to update brew"
-		brew upgrade -q  && \
-		success "Successfully upgraded brew" || error "Failed to upgrade brew"
-	fi
-
-	banner "$BANNER_EXIT"
-	unset BANNER_TITLE
-	unset BANNER_EXIT
-	return 0
-}
 
 # ── Terminal helpers ──────────────────────────────────────────────────────────
 hide_cursor()  { printf '\033[?25l'; }
