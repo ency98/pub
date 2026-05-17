@@ -51,7 +51,7 @@ declare -a ITEMS=(
 	"Install starship|install_starship"
 	"Install chezmoi|install_chezmoi"
   	"- Init chezmoi (SSH)|init_chezmoi_ssh"
-	"- Init chezmoi (Token)|init_chezmoi_with_token"
+	"- Init chezmoi (Token)|init_chezmoi_token"
 )
 
 # ── Track selected state (0=off, 1=on) ───────────────────────────────────────
@@ -140,8 +140,8 @@ update_bootstrap_script ()
 	mkdir -p ~/.scripts
 	chmod +x "$BOOTSTRAP_DEST"  && \
 	success "\nSuccessfully updated bootstrap script permissions" || error "\nFailed to update bootstrap script permissions"
-
-	mv -v "$BOOTSTRAP_DEST" ~/.scripts/bootstrap.sh  && \
+	rm -rf "$HOME/.scripts/bootstrap.sh"
+	mv -v "$BOOTSTRAP_DEST" "$HOME/.scripts/bootstrap.sh"  && \
 	success "\nSuccessfully updated bootstrap script file."  || error "\nFailed to update bootstrap script file."
 
 	banner "$BANNER_EXIT"
