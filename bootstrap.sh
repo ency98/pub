@@ -721,8 +721,8 @@ init_chezmoi_token ()
 	local GIT_USERNAME=""
 	local GIT_EMAIL=""
 	local GIT_TOKEN=""
-	local GIT_REPO="github.com/$GIT_USERNAME/dotfiles.git"
-	local DOTFILES_REPO="https://$GIT_TOKEN@$GIT_REPO"
+	local GIT_REPO="github.com/${GIT_USERNAME}/dotfiles.git"
+	local DOTFILES_REPO="https://${GIT_TOKEN}@${GIT_REPO}"
 
 	banner "$BANNER_TITLE"
 
@@ -732,39 +732,39 @@ init_chezmoi_token ()
 	#! GIT EMAIL
 	echo "" && print_line && echo -e "${RED}\n"
 	read -rp "Please enter your GitHub email: " GIT_EMAIL && echo -e "${NC}"
-	warn "GitHub email entered: ${YELLOW}$GIT_EMAIL${NC}" && echo ""
+	warn "GitHub email entered: ${YELLOW}${GIT_EMAIL}${NC}" && echo ""
 
 	#! GIT USERNAME
 	echo "" && print_line && echo -e "${RED}\n"
 	read -rp "Please enter your GitHub username: " GIT_USERNAME && echo -e "${NC}"
-	warn "GitHub username entered: ${YELLOW}$GIT_USERNAME${NC}" && echo ""
+	warn "GitHub username entered: ${YELLOW}${GIT_USERNAME}${NC}" && echo ""
 
 	#! GIT TOKEN
 	echo "" && print_line && echo -e "${RED}\n"
 	read -rp "Please enter your GitHub token: " GIT_TOKEN && echo -e "${NC}"
-	warn "GitHub token entered: ${YELLOW}$GIT_TOKEN${NC}" && echo ""
+	warn "GitHub token entered: ${YELLOW}${GIT_TOKEN}${NC}" && echo ""
 
 	echo "" && print_line && echo ""
-	info "Git Username set to: ${YELLOW}$GIT_USERNAME${NC}"
-	info "Git email set to: ${YELLOW}$GIT_EMAIL${NC}"
-	info "Git token set to: ${YELLOW}$GIT_TOKEN${NC}"
-	info "Git repository set to: ${YELLOW}$GIT_REPO${NC}"
-	info "Initializing chezmoi with remote repository: $DOTFILES_REPO"
+	info "Git Username set to: ${YELLOW}${GIT_USERNAME}${NC}"
+	info "Git email set to: ${YELLOW}${GIT_EMAIL}${NC}"
+	info "Git token set to: ${YELLOW}${GIT_TOKEN}${NC}"
+	info "Git repository set to: ${YELLOW}${GIT_REPO}${NC}"
+	info "Initializing chezmoi with remote repository: ${DOTFILES_REPO}"
 
 	echo "" && print_line && echo -e "${YELLOW}\n"
 	read -rp "Please check the information above. Press Enter to continue or Ctrl+C to abort: " && echo -e "${NC}"
 
 
 	echo "" && print_line && echo ""
-	info "Git Username set to: ${YELLOW}$GIT_USERNAME${NC}"
-	info "Git email set to: ${YELLOW}$GIT_EMAIL${NC}"
-	info "Git token set to: ${YELLOW}$GIT_TOKEN${NC}"
-	info "Git repository set to: ${YELLOW}$GIT_REPO${NC}\n"
-	info "Initializing chezmoi with remote repository: $DOTFILES_REPO"
+	info "Git Username set to: ${YELLOW}${GIT_USERNAME}${NC}"
+	info "Git email set to: ${YELLOW}${GIT_EMAIL}${NC}"
+	info "Git token set to: ${YELLOW}${GIT_TOKEN}${NC}"
+	info "Git repository set to: ${YELLOW}${GIT_REPO}${NC}\n"
+	info "Initializing chezmoi with remote repository: ${DOTFILES_REPO}"
 
 	echo "" && print_line && echo -e "${YELLOW}\n"
-	read -rp "Please check the information above. Press Enter to continue or Ctrl+C to abort: " GIT_TOKENS && echo -e "${NC}"
-
+	read -rp "Please check the information above. Press Enter to continue or Ctrl+C to abort: " && echo -e "${NC}"
+	return 0
 	echo "" && print_line
 	info "Checking if chezmoi is already installed."
 	if command -v "chezmoi" &>/dev/null; then
