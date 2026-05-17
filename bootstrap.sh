@@ -752,7 +752,7 @@ init_chezmoi_token ()
 	info "Initializing chezmoi with remote repository: $DOTFILES_REPO"
 
 	echo "" && print_line && echo -e "${YELLOW}\n"
-	read -rp "Please check the information above. Press Enter to continue or Ctrl+C to abort: " GIT_TOKENS && echo -e "${NC}"
+	read -rp "Please check the information above. Press Enter to continue or Ctrl+C to abort: " && echo -e "${NC}"
 
 
 	echo "" && print_line && echo ""
@@ -855,7 +855,7 @@ init_chezmoi_ssh ()
 	info "Initializing chezmoi with remote repository: $DOTFILES_REPO"
 
 	echo "" && print_line && echo -e "${YELLOW}\n"
-	read -rp "Please check the information above. Press Enter to continue or Ctrl+C to abort: " GIT_TOKENS && echo -e "${NC}"
+	read -rp "Please check the information above. Press Enter to continue or Ctrl+C to abort: " && echo -e "${NC}"
 
 	echo "" && print_line
 	info "Checking if chezmoi is already installed."
