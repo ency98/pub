@@ -534,11 +534,21 @@ install_nerdfonts()
 	for font in "${fonts[@]}"; do
 		print_line
 		info "Downloading $download_url"
+
 		zip_file="${font}.zip"
 		download_url="https://github.com/ryanoasis/nerd-fonts/releases/download/${version}/${zip_file}"
 		wget "$download_url"
 
 		info "Installing $font..."
+		if [ -f "$HOME/.local/share/fonts/LICENSE" ]; then
+			rm -f "$HOME/.local/share/fonts/LICENSE"
+		fi
+		if [ -f "$HOME/.local/share/fonts/README.md?" ]; then
+		 	rm -f "$HOME/.local/share/fonts/README.md?"
+		fi
+		if [ -f "$HOME/.local/share/fonts/LICENCE.txt?" ]; then
+		 	rm -f "$HOME/.local/share/fonts/LICENCE.txt?"
+		fi
 		unzip "$zip_file" -d "$fonts_dir"
 
 		info "Cleaning up..."
