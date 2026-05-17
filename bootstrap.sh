@@ -8,10 +8,10 @@
 #&  Script variables and functions
 
 #? info|success|warn|error "Message to print."
-info()    { echo -e "\n${BLUE}[INFO]${NC}\n  $*"; }
-success() { echo -e "\n${GREEN}[OK]${NC}\n    $*"; }
-warn()    { echo -e "\n${YELLOW}[WARN]${NC}\n  $*"; }
-error()   { echo -e "\n${RED}[ERROR]${NC}\n $*" >&2; }
+info()    { echo -e "\n${BLUE}[INFO]${NC}  $*\n"; }
+success() { echo -e "\n${GREEN}[OK]${NC}    $*\n"; }
+warn()    { echo -e "\n${YELLOW}[WARN]${NC}  $*\n"; }
+error()   { echo -e "\n${RED}[ERROR]${NC} $*\n" >&2; }
 
 #? Prints a banner message.
 banner ()
@@ -749,21 +749,11 @@ init_chezmoi_token ()
 	info "Git email set to: ${YELLOW}${GIT_EMAIL}${NC}"
 	info "Git token set to: ${YELLOW}${GIT_TOKEN}${NC}"
 	info "Git repository set to: ${YELLOW}${GIT_REPO}${NC}"
-	info "Initializing chezmoi with remote repository: ${DOTFILES_REPO}"
+	info "Initializing chezmoi with remote repository: https://${GIT_TOKEN}@${GIT_REPO}"
 
 	echo "" && print_line && echo -e "${YELLOW}\n"
 	read -rp "Please check the information above. Press Enter to continue or Ctrl+C to abort: " && echo -e "${NC}"
 
-
-	echo "" && print_line && echo ""
-	info "Git Username set to: ${YELLOW}${GIT_USERNAME}${NC}"
-	info "Git email set to: ${YELLOW}${GIT_EMAIL}${NC}"
-	info "Git token set to: ${YELLOW}${GIT_TOKEN}${NC}"
-	info "Git repository set to: ${YELLOW}${GIT_REPO}${NC}\n"
-	info "Initializing chezmoi with remote repository: ${DOTFILES_REPO}"
-
-	echo "" && print_line && echo -e "${YELLOW}\n"
-	read -rp "Please check the information above. Press Enter to continue or Ctrl+C to abort: " && echo -e "${NC}"
 	return 0
 	echo "" && print_line
 	info "Checking if chezmoi is already installed."
@@ -790,8 +780,8 @@ init_chezmoi_token ()
 	chezmoi purge --force -v
 
 	print_line
-	info "Initializing chezmoi with remote repository: $DOTFILES_REPO"
-	chezmoi init $DOTFILES_REPO
+	info "Initializing chezmoi with remote repository: https://${GIT_TOKEN}@${GIT_REPO}"
+	chezmoi init "https://${GIT_TOKEN}@${GIT_REPO}"
 
 	print_line
 	warn "Applying chezmoi configuration to the local system. This will overwrite any existing local dotfiles with the remote repository."
