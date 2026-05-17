@@ -714,15 +714,16 @@ install_chezmoi ()
 }
 #? ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !#
 #?	init chezmoi
+GIT_USERNAME=""
+GIT_EMAIL=""
+GIT_TOKEN=""
+GIT_REPO="github.com/${GIT_USERNAME}/dotfiles.git"
+DOTFILES_REPO="https://${GIT_TOKEN}@${GIT_REPO}"
 init_chezmoi_token ()
 {
 	local BANNER_TITLE="Initializing chezmoi to update and manage local dot files"
 	local BANNER_EXIT="chezmoi initialization finished at: ${YELLOW}$(date "+%Y-%m-%d_%H:%M:%S")${NC}"
-	local GIT_USERNAME=""
-	local GIT_EMAIL=""
-	local GIT_TOKEN=""
-	local GIT_REPO="github.com/${GIT_USERNAME}/dotfiles.git"
-	local DOTFILES_REPO="https://${GIT_TOKEN}@${GIT_REPO}"
+
 
 	banner "$BANNER_TITLE"
 
