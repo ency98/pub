@@ -730,22 +730,22 @@ init_chezmoi_token ()
 
 
 	#! GIT EMAIL
-	echo "" && print_line && echo "${RED}\n"
-	read -rp "Please enter your GitHub email: " GIT_EMAIL && echo "${NC}"
+	echo "" && print_line && echo -e "${RED}\n"
+	read -rp "Please enter your GitHub email: " GIT_EMAIL && echo -e "${NC}"
 	warn "GitHub email entered: ${YELLOW}$GIT_EMAIL${NC}" && echo ""
 
 	#! GIT USERNAME
-	echo "" && print_line && echo "${RED}\n"
-	read -rp "Please enter your GitHub username: " GIT_USERNAME && echo "${NC}"
+	echo "" && print_line && echo -e "${RED}\n"
+	read -rp "Please enter your GitHub username: " GIT_USERNAME && echo -e "${NC}"
 	warn "GitHub username entered: ${YELLOW}$GIT_USERNAME${NC}" && echo ""
 
 	#! GIT TOKEN
-	read -rp "Please enter your GitHub token: " GIT_TOKEN && echo "${NC}"
+	read -rp "Please enter your GitHub token: " GIT_TOKEN && echo -e "${NC}"
 	warn "GitHub token entered: ${YELLOW}$GIT_TOKEN${NC}" && echo ""
 
 	#! GIT REPO
-	echo "" && print_line && echo "${RED}\n"
-	read -rp "Please enter your GitHub repository (e.g., github.com/GITHUB-USERNAME/dotfiles.git): " GIT_REPO && echo "${NC}"
+	echo "" && print_line && echo -e "${RED}\n"
+	read -rp "Please enter your GitHub repository (e.g., github.com/GITHUB-USERNAME/dotfiles.git): " GIT_REPO && echo -e "${NC}"
 	warn "GitHub repository entered: ${YELLOW}$GIT_REPO${NC}" && echo ""
 
 	echo "" && print_line && echo ""
@@ -755,8 +755,8 @@ init_chezmoi_token ()
 	info "Git repository set to: ${YELLOW}$GIT_REPO${NC}"
 	info "Initializing chezmoi with remote repository: $DOTFILES_REPO"
 
-	echo "" && print_line && echo "${YELLOW}\n"
-	read -rp "Please check the information above. Press Enter to continue or Ctrl+C to abort: " GIT_TOKENS && echo "${NC}"
+	echo "" && print_line && echo -e "${YELLOW}\n"
+	read -rp "Please check the information above. Press Enter to continue or Ctrl+C to abort: " GIT_TOKENS && echo -e "${NC}"
 
 
 	echo "" && print_line && echo ""
@@ -766,8 +766,8 @@ init_chezmoi_token ()
 	info "Git repository set to: ${YELLOW}$GIT_REPO${NC}\n"
 	info "Initializing chezmoi with remote repository: $DOTFILES_REPO"
 
-	echo "" && print_line && echo "${YELLOW}\n"
-	read -rp "Please check the information above. Press Enter to continue or Ctrl+C to abort: " GIT_TOKENS && echo "${NC}"
+	echo "" && print_line && echo -e "${YELLOW}\n"
+	read -rp "Please check the information above. Press Enter to continue or Ctrl+C to abort: " GIT_TOKENS && echo -e "${NC}"
 
 	echo "" && print_line
 	info "Checking if chezmoi is already installed."
@@ -842,18 +842,18 @@ init_chezmoi_ssh ()
 	warn "Configuring chezmoi for ssh key auth..."
 
 	#! GIT EMAIL
-	echo "" && print_line && echo "${RED}\n"
-	read -rp "Please enter your GitHub email: " GIT_EMAIL && echo "${NC}"
+	echo "" && print_line && echo -e "${RED}\n"
+	read -rp "Please enter your GitHub email: " GIT_EMAIL && echo -e "${NC}"
 	warn "GitHub email entered: ${YELLOW}$GIT_EMAIL${NC}" && echo ""
 
 	#! GIT USERNAME
-	echo "" && print_line && echo "${RED}\n"
-	read -rp "Please enter your GitHub username: " GIT_USERNAME && echo "${NC}"
+	echo "" && print_line && echo -e "${RED}\n"
+	read -rp "Please enter your GitHub username: " GIT_USERNAME && echo -e "${NC}"
 	warn "GitHub username entered: ${YELLOW}$GIT_USERNAME${NC}" && echo ""
 
 	#! GIT REPO
-	echo "" && print_line && echo "${RED}\n"
-	read -rp "Please enter your GitHub repository (e.g., github.com/GITHUB-USERNAME/dotfiles.git): " GIT_REPO && echo "${NC}"
+	echo "" && print_line && echo -e "${RED}\n"
+	read -rp "Please enter your GitHub repository (e.g., github.com/GITHUB-USERNAME/dotfiles.git): " GIT_REPO && echo -e "${NC}"
 	warn "GitHub repository entered: ${YELLOW}$GIT_REPO${NC}" && echo ""
 
 	echo "" && print_line && echo ""
@@ -862,8 +862,8 @@ init_chezmoi_ssh ()
 	info "Git repository set to: ${YELLOW}$GIT_REPO${NC}"
 	info "Initializing chezmoi with remote repository: $DOTFILES_REPO"
 
-	echo "" && print_line && echo "${YELLOW}\n"
-	read -rp "Please check the information above. Press Enter to continue or Ctrl+C to abort: " GIT_TOKENS && echo "${NC}"
+	echo "" && print_line && echo -e "${YELLOW}\n"
+	read -rp "Please check the information above. Press Enter to continue or Ctrl+C to abort: " GIT_TOKENS && echo -e "${NC}"
 
 	echo "" && print_line
 	info "Checking if chezmoi is already installed."
