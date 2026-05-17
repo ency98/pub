@@ -740,13 +740,9 @@ init_chezmoi_token ()
 	warn "GitHub username entered: ${YELLOW}$GIT_USERNAME${NC}" && echo ""
 
 	#! GIT TOKEN
+	echo "" && print_line && echo -e "${RED}\n"
 	read -rp "Please enter your GitHub token: " GIT_TOKEN && echo -e "${NC}"
 	warn "GitHub token entered: ${YELLOW}$GIT_TOKEN${NC}" && echo ""
-
-	#! GIT REPO
-	echo "" && print_line && echo -e "${RED}\n"
-	read -rp "Please enter your GitHub repository (e.g., github.com/GITHUB-USERNAME/dotfiles.git): " GIT_REPO && echo -e "${NC}"
-	warn "GitHub repository entered: ${YELLOW}$GIT_REPO${NC}" && echo ""
 
 	echo "" && print_line && echo ""
 	info "Git Username set to: ${YELLOW}$GIT_USERNAME${NC}"
@@ -834,7 +830,7 @@ init_chezmoi_ssh ()
 	local BANNER_EXIT="chezmoi initialization finished at: ${YELLOW}$(date "+%Y-%m-%d_%H:%M:%S")${NC}"
 	local GIT_USERNAME=""
 	local GIT_EMAIL=""
-	local GIT_REPO=""
+	local GIT_REPO="github.com/$GIT_USERNAME/dotfiles.git"
 	local DOTFILES_REPO="git@$GIT_REPO"
 
 	banner "$BANNER_TITLE"
@@ -851,10 +847,6 @@ init_chezmoi_ssh ()
 	read -rp "Please enter your GitHub username: " GIT_USERNAME && echo -e "${NC}"
 	warn "GitHub username entered: ${YELLOW}$GIT_USERNAME${NC}" && echo ""
 
-	#! GIT REPO
-	echo "" && print_line && echo -e "${RED}\n"
-	read -rp "Please enter your GitHub repository (e.g., github.com/GITHUB-USERNAME/dotfiles.git): " GIT_REPO && echo -e "${NC}"
-	warn "GitHub repository entered: ${YELLOW}$GIT_REPO${NC}" && echo ""
 
 	echo "" && print_line && echo ""
 	info "Git Username set to: ${YELLOW}$GIT_USERNAME${NC}"
