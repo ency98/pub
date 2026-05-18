@@ -8,21 +8,22 @@ BOOTSTRAP_SRC="https://raw.githubusercontent.com/ency98/pub/refs/heads/main/boot
 FUNC_SRC="https://raw.githubusercontent.com/ency98/pub/refs/heads/main/_func.sh"
 TEMP_DEST="/tmp"
 DEST="$HOME/.scripts"
-if [ -f "$TEMP_DEST/_func.sh" ]; then; rm -f "$TEMP_DEST/_func.sh"; fi
-if [ -f "$TEMP_DEST/bootstrap.sh" ]; then; rm -f "$TEMP_DEST/bootstrap.sh"; fi
-if [ -f "$DEST/_func.sh" ]; then; rm -f "$DEST/_func.sh"; fi
-if [ -f "$DEST/_func.sh" ]; then; rm -f "$DEST/_functions.sh"; fi
-if [ -f "$DEST/bootstrap.sh" ]; then; rm -f "$DEST/bootstrap.sh"; fi
-wget -O "$BOOTSTRAP_SRC" "$TEMP_DEST/bootstrap.sh"
-wget -O "$FUNC_DEST" "$TEMP_DEST/_functions.sh"
-mv -fv "$TEMP_DEST/_functions.sh" "$DEST/_functions.sh"
-mv -fv "$TEMP_DEST/bootstrap.sh" "$DEST/bootstrap.sh"
-chmod +x "$DEST/*.sh"
+[ -f "$TEMP_DEST/_func.sh" ] && rm -f "$TEMP_DEST/_func.sh" && \
+[ -f "$TEMP_DEST/bootstrap.sh" ] && rm -f "$TEMP_DEST/bootstrap.sh" && \
+[ -f "$DEST/_func.sh" ] && rm -f "$DEST/_func.sh" && \
+[ -f "$DEST/_functions.sh" ] && rm -f "$DEST/_functions.sh" && \
+[ -f "$DEST/bootstrap.sh" ] && rm -f "$DEST/bootstrap.sh" && \
+wget -O "$BOOTSTRAP_SRC" "$TEMP_DEST/bootstrap.sh" && \
+wget -O "$FUNC_DEST" "$TEMP_DEST/_functions.sh" && \
+[ ! -d "$DEST" ] && mkdir -p "$DEST" && \
+mv -fv "$TEMP_DEST/_functions.sh" "$DEST/_functions.sh" && \
+mv -fv "$TEMP_DEST/bootstrap.sh" "$DEST/bootstrap.sh" && \
+chmod +x "$DEST/*.sh" && \
 unset BOOTSTRAP_SRC
 unset FUNC_SRC
 unset TEMP_DEST
 unset DEST
-~/.scripts/bootstrap.sh"
+"~/.scripts/bootstrap.sh"
 ```
 
 If you need to run the script again you can run:
