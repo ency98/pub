@@ -4,6 +4,8 @@
 #  Arrow keys + Space to toggle, Enter to run selected, q to quit
 # =============================================================================
 
+source $HOME/.scripts/_functions.sh
+
 #& ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !#
 #&  Script variables and functions
 
@@ -119,36 +121,42 @@ update_all ()
 }
 #? ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !#
 #?	update bootstrap script
+
+
 update_bootstrap_script ()
 {
 	local BANNER_TITLE="Updating the bootstrap script"
 	local BANNER_EXIT="Bootstrap script update finished at: ${YELLOW}$(date "+%Y-%m-%d_%H:%M:%S")${NC}"
-	local BOOTSTRAP_SRC="https://raw.githubusercontent.com/ency98/pub/refs/heads/main/bootstrap.sh"
-	local BOOTSTRAP_DEST="/tmp/bootstrap.sh"
+	local URL_SRC="https://raw.githubusercontent.com/ency98/pub/refs/heads/main/bootstrap.sh"
+	local DEST="/tmp/bootstrap.sh"
 
 	banner "$BANNER_TITLE"
 
 	info "Updating this script."
-
 	print_line
-	info "Downloading updated bootstrap script from:\n${YELLOW}$BOOTSTRAP_SRC${NC}"
-	wget -O "$BOOTSTRAP_DEST" "$BOOTSTRAP_SRC"  && \
+	info "Cleaning up old files and making sure the correct directories exist."
+	cd "$HOME" && mkdir -p "$HOME/.scripts"
+	rm -f "$HOME/.scripts/bootstrap.sh" "$DEST"
+	print_line
+	info "Downloading updated bootstrap script from:\n${YELLOW}$URL_SRC${NC}"
+	wget -O "$DEST" "$URL_SRC"  && \
 	success "\nSuccessfully downloaded bootstrap script" || error "\nFailed to download bootstrap script"
 
 	print_line
 	info "Updating bootstrap script..."
 	mkdir -p ~/.scripts
-	chmod +x "$BOOTSTRAP_DEST"  && \
+	chmod +x "$DEST"  && \
 	success "\nSuccessfully updated bootstrap script permissions" || error "\nFailed to update bootstrap script permissions"
-	rm -rf "$HOME/.scripts/bootstrap.sh"
-	mv -v "$BOOTSTRAP_DEST" "$HOME/.scripts/bootstrap.sh"  && \
+
+	chmod +x "$DEST"
+	mv -v "$DEST" "$HOME/.scripts/bootstrap.sh"  && \
 	success "\nSuccessfully updated bootstrap script file."  || error "\nFailed to update bootstrap script file."
 
 	banner "$BANNER_EXIT"
 	unset BANNER_TITLE
 	unset BANNER_EXIT
-	unset BOOTSTRAP_SRC
-	unset BOOTSTRAP_DEST
+	unset URL_SRC
+	unset DEST
 	exit 0
 
 }

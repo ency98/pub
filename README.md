@@ -4,18 +4,25 @@ public files
 ## bootstrap
 
 ```bash
-FUNC_SRC="https://raw.githubusercontent.com/ency98/pub/refs/heads/main/_func.sh"
-FUNC_DEST="/tmp/_func.sh"
-wget -O "$FUNC_DEST" "$FUNC_SRC"
 BOOTSTRAP_SRC="https://raw.githubusercontent.com/ency98/pub/refs/heads/main/bootstrap.sh"
-if [ -f "~/.zshrc" ]; then
-	echo "export BOOTSTRAP_SRC=$BOOTSTRAP_SRC" >> ~/.zshrc
-	echo "alias bootstrap='wget -qO- $BOOTSTRAP_SRC | bash'" >> ~/.zshrc
-elif [ -f "~/.bashrc" ]; then
-	echo "export BOOTSTRAP_SRC=$BOOTSTRAP_SRC" >> ~/.bashrc
-	echo "alias bootstrap='$HOME/.scripts/bootstrap.sh" >> ~/.bashrc
-fi
-wget -qO- $BOOTSTRAP_SRC | bash
+FUNC_SRC="https://raw.githubusercontent.com/ency98/pub/refs/heads/main/_func.sh"
+TEMP_DEST="/tmp"
+DEST="$HOME/.scripts"
+if [ -f "$TEMP_DEST/_func.sh" ]; then; rm -f "$TEMP_DEST/_func.sh"; fi
+if [ -f "$TEMP_DEST/bootstrap.sh" ]; then; rm -f "$TEMP_DEST/bootstrap.sh"; fi
+if [ -f "$DEST/_func.sh" ]; then; rm -f "$DEST/_func.sh"; fi
+if [ -f "$DEST/_func.sh" ]; then; rm -f "$DEST/_functions.sh"; fi
+if [ -f "$DEST/bootstrap.sh" ]; then; rm -f "$DEST/bootstrap.sh"; fi
+wget -O "$BOOTSTRAP_SRC" "$TEMP_DEST/bootstrap.sh"
+wget -O "$FUNC_DEST" "$TEMP_DEST/_functions.sh"
+mv -fv "$TEMP_DEST/_functions.sh" "$DEST/_functions.sh"
+mv -fv "$TEMP_DEST/bootstrap.sh" "$DEST/bootstrap.sh"
+chmod +x "$DEST/*.sh"
+unset BOOTSTRAP_SRC
+unset FUNC_SRC
+unset TEMP_DEST
+unset DEST
+~/.scripts/bootstrap.sh"
 ```
 
 If you need to run the script again you can run:
