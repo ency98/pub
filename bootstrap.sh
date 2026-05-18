@@ -25,16 +25,14 @@ banner ()
 }
 
 #? Print a single (80 char) line of dashes for visual separation in output.
-print_line(){ echo -e "\n${GREEN}--------------------------------------------------------------------------------${NC}\n" ; }
+print_line(){ echo -e "${GREEN}--------------------------------------------------------------------------------${NC}\n" ; }
 
 #? Print a single (80 char) line of equal signs for visual separation in output.
-print_double_line(){ echo -e "\n${BLUE}================================================================================${NC}\n" ; }
+print_double_line(){ echo -e "${BLUE}================================================================================${NC}\n" ; }
 
 return_to_menu ()
 {
-	print_line && echo -e "${YELLOW}"
-	read -rp "Press Enter to return to the main menu and continue or Ctrl+C to exit: "
-	echo -e "${NC}$(print_line)\n"
+	echo -e "${YELLOW}" && read -rp "Press Enter to return to the main menu or Ctrl+C to exit:" && echo -e "${NC}"
 	main
 }
 
@@ -90,25 +88,25 @@ update_all ()
 
 	print_line && info "Checking OS..."
 	if [[ "$(uname -s)" == "Darwin" ]]; then
-		info "\nDetected macOS."
+		info "Detected macOS."
 		if -f /home/linuxbrew/.linuxbrew/bin/brew &>/dev/null; then
 			print_line && info "brew package manager detected. Running brew update and upgrade."
-			info "Running brew update...\n"
+			info "Running brew update..."
 			brew update -q  && \
-			success "\nSuccessfully updated brew" || error "\nFailed to update brew"
-			info "Running brew upgrade...\n"
+			success "Successfully updated brew" || error "Failed to update brew"
+			info "Running brew upgrade..."
 			brew upgrade -q  && \
-			success "\nSuccessfully upgraded brew" || error "\nFailed to upgrade brew"
+			success "Successfully upgraded brew" || error "Failed to upgrade brew"
 		fi
 	elif [[ "$(uname -s)" == "Linux" ]]; then
-		info "\nDetected Linux."
+		info "Detected Linux."
 		print_line && info "Running apt update and upgrade."
 		info "Running apt update...\n"
 		sudo apt-get update -y -q --fix-missing && \
-		success "\nSuccessfully updated system" || error "\nFailed to update system"
+		success "Successfully updated system" || error "Failed to update system"
 		info "Running apt upgrade...\n"
 		sudo apt-get upgrade -y -q --fix-missing --auto-remove --purge && \
-		success "\nSuccessfully upgraded system" || error "\nFailed to upgrade system"
+		success "Successfully upgraded system" || error "Failed to upgrade system"
 		print_line && info "Since we are here making sure curl and wget are installed."
 		sudo apt install curl wget -qq -y  && \
 		success "curl and wget installed successfully" || error "Failed to install curl and wget"
@@ -116,10 +114,10 @@ update_all ()
 			print_line && info "brew package manager detected. Running brew update and upgrade as well."
 			info "Running brew update."
 			brew update -q  && \
-			success "\nSuccessfully updated brew" || error "\nFailed to update brew"
+			success "Successfully updated brew" || error "Failed to update brew"
 			info "Running brew upgrade."
 			brew upgrade -q  && \
-			success "\nSuccessfully upgraded brew" || error "\nFailed to upgrade brew"
+			success "Successfully upgraded brew" || error "Failed to upgrade brew"
 		fi
 	fi
 
@@ -1269,7 +1267,7 @@ create_user () #* Adding user and setting password
 	unset NEW_USER_PASS
 	unset choice
 	return_to_menu
-
+}
 #? ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !#
 #?	create SSH key
 make_ssh_key () #* File: ssh key: .ssh/id_ed25519
@@ -1280,23 +1278,6 @@ make_ssh_key () #* File: ssh key: .ssh/id_ed25519
 	banner "$BANNER_TITLE"
 
 	info "Creating ssh keys for: $USER"
-
-	#~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !#
-
-	while true; do
-    # Read key (handles escape sequences for arrow keys)
-    	local key
-		IFS= read -rsn1 key
-
-	case "$key" in
-      	# q — quit
-		q|Q)
-			clear_screen
-			printf "\n  ${DIM}Aborted.${RESET}\n\n"
-			break
-		;;
-		esac
-	done
 
 	#~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !#
 
@@ -1338,9 +1319,9 @@ draw_menu() {
   # Header
   move_to 1 1
   printf "${BOLD}${CYAN}"
-  printf '╔══════════════════════════════════════╗\n'
-  printf '║       ⚙  Setup Manager  ⚙            ║\n'
-  printf '╚══════════════════════════════════════╝'
+  printf '╔═════════════════════════════════════════════════════════╗\n'
+  printf '║                   ⚙  Setup Manager  ⚙                   ║\n'
+  printf '╚═════════════════════════════════════════════════════════╝'
   printf "${RESET}\n"
 
   printf "${DIM}  ↑↓ move  Space toggle  a all  n none  Enter run  q quit${RESET}\n\n"
@@ -1411,12 +1392,11 @@ run_selected() {
 }
 
 # ── Main loop ─────────────────────────────────────────────────────────────────
-main()
-{
-	# Switch to alternate screen buffer
-	tput smcup 2>/dev/null || true
-	hide_cursor
-	stty -echo 2>/dev/null || true
+main() {
+  # Switch to alternate screen buffer
+  tput smcup 2>/dev/null || true
+  hide_cursor
+  stty -echo 2>/dev/null || true
 
   draw_menu
 
@@ -1469,5 +1449,4 @@ main()
     draw_menu
   done
 }
-
-main draw_menu
+main
