@@ -386,7 +386,11 @@ install_zsh ()
 		unset BANNER_EXIT
 		return 1
 	fi
-
+	print_line
+	echo -e "${GREEN}You can get a list of available prompts by using ${CYAN}prompt -l${GREEN}. To enable a prompt,
+	for example ${CYAN}adam1, simply type ${CYAN}prompt adam1. The list as of version 5.0.0 of zsh is:
+	${CYAN}adam1${GREEN},${CYAN} adam2,${CYAN} bart,${CYAN} bigfade,${CYAN} clint,${CYAN} elite2,${CYAN} elite,${CYAN} fade,${CYAN} fire,${CYAN} off,${CYAN} oliver,${CYAN} pws,${CYAN} redhat,${CYAN} suse,${CYAN} walters,${CYAN} zefram${GREEN}.
+	You can also get a preview of the prompts using the command ${CYAN}prompt -p${GREEN}.${NC}\n"
 	banner "$BANNER_EXIT"
 	unset BANNER_TITLE
 	unset BANNER_EXIT
